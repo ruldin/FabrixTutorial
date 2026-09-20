@@ -1,0 +1,6 @@
+{
+  "name": "Tutorial de Programación para Fabrix",
+  "description": "Guía de estudio interactiva y simulador de algoritmos paso a paso para secundaria: Matrices, Ordenamiento por Inserción y Pilas (Stack) en Python y JavaScript.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
