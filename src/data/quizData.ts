@@ -139,29 +139,29 @@ export const stackQuiz: QuizQuestion[] = [
   },
   {
     id: 'stack-3',
-    question: 'En la clase de Fabrix, ¿por qué es indispensable tener la condición de seguridad `if self.pila:` antes de hacer pop() o top()?',
+    question: 'En la pila MANUAL de Fabrix (arreglo fijo + puntero tope), ¿por qué se usan las guardias `if tope >= 0` y `if tope < MAX - 1`?',
     options: [
       'Para evitar que la computadora se apague.',
-      'Para evitar un error en tiempo de ejecución (IndexError) si el usuario intenta sacar o mirar la cima de una pila vacía.',
-      'Porque Python no permite listas con más de 10 elementos.',
-      'Es solo decorativo y no cumple función.'
+      'Para evitar UNDERFLOW (sacar/mirar con tope=-1, pila vacía) y OVERFLOW (meter con tope=9, pila llena 10/10).',
+      'Porque Python no permite usar la variable tope.',
+      'Son solo decorativas y no cumplen función.'
     ],
     correctIndex: 1,
-    explanation: '¡Muy bien! Si una lista está vacía e intentas consultar `pila[-1]` o hacer `pila.pop()`, Python lanzará un `IndexError: pop from empty list`. La cláusula de guarda evita que el programa se rompa.',
-    hint: '¿Qué pasa si intentas sacar un plato de una mesa donde no hay platos?'
+    explanation: '¡Muy bien! Con arreglo fijo no hay append/pop que crezcan solos: si tope==-1 no hay casilla que leer (UNDERFLOW) y si tope==9 no hay casilla libre (OVERFLOW). Las guardias protegen al puntero antes de moverlo.',
+    hint: '¿Qué pasa si intentas sacar un plato de una mesa vacía, o poner un plato 11 en un estante de 10?'
   },
   {
     id: 'stack-4',
-    question: 'En la aplicación requerida, ¿qué rango de números aleatorios se debe generar al hacer clic en Push?',
+    question: 'La pila manual tiene MAX=10 y el puntero tope. Si tope=9 (10/10 lleno) y presionas Push con el valor 50, ¿qué ocurre?',
     options: [
-      'Entre 0 y 1',
-      'Entre 1 y 100',
-      'Entre 10 y 50',
-      'Cualquier número decimal'
+      'El 50 se guarda en datos[10] y la pila crece a 11 elementos.',
+      'OVERFLOW: se rechaza el valor, el puntero se queda en 9 y la pila sigue con 10 elementos.',
+      'El puntero vuelve a -1 y la pila se vacía.',
+      'El 50 reemplaza a datos[0] automáticamente.'
     ],
     correctIndex: 1,
-    explanation: '¡Correcto! La especificación del proyecto pide generar un número aleatorio entero entre 1 y 100 (`random.randint(1, 100)` o `Math.floor(Math.random() * 100) + 1`).',
-    hint: 'Revisa la tabla de métodos de la tarea de Fabrix.'
+    explanation: '¡Correcto! Llena significa tope == MAX-1 == 9. El push manual primero pregunta `¿tope < 9?`; como es falso, muestra OVERFLOW y NO mueve el puntero ni escribe. (Y recuerda: cada push válido genera un aleatorio entre 1 y 100).',
+    hint: 'Piensa en un estacionamiento de 10 lugares totalmente ocupado: el carro 11 no entra.'
   }
 ];
 
@@ -197,11 +197,11 @@ export const finalExamQuestions: QuizQuestion[] = [
   },
   {
     id: 'final-4',
-    question: 'En Python, ¿cuál es la forma canónica de acceder al último elemento de una lista `self.pila` sin conocer previamente su longitud?',
-    options: ['self.pila[ultimo]', 'self.pila[-1]', 'self.pila.top()', 'self.pila[end]'],
+    question: 'En la pila MANUAL (arreglo fijo datos[0..9] + puntero tope), ¿cómo se accede a la cima sin usar append/pop?',
+    options: ['self.datos[ultimo]', 'self.datos[self.tope]', 'self.datos.top()', 'self.datos[10]'],
     correctIndex: 1,
-    explanation: 'En Python los índices negativos cuentan desde el final: `self.pila[-1]` representa el último elemento.',
-    hint: 'Los números negativos en corchetes cuentan hacia atrás desde el final.'
+    explanation: 'La cima siempre es datos[tope]: el puntero apunta exactamente a la última casilla ocupada. Vacía es tope==-1 y llena es tope==9. Ya no se usa pila[-1] porque el arreglo siempre tiene 10 casillas fijas.',
+    hint: 'El puntero tope es el dedo que señala la cima.'
   },
   {
     id: 'final-5',

@@ -295,127 +295,180 @@ console.log(\`Comparaciones: \${resultado.comparaciones}, Desplazamientos: \${re
 };
 
 export const stackCode: CodeExample = {
-  title: 'Estructura de Datos: Pila (Stack - LIFO)',
-  description: 'Implementación didáctica con clase App, lista interna y 4 operaciones: Push (1-100 aleatorio), Pop, Top y Empty. LIFO: Last-In, First-Out.',
-  pseudocode: `CLASE PilaApp:
+  title: 'Pila Manual: Arreglo Fijo de 10 + Puntero tope (Sin append/pop)',
+  description: 'Implementación manual con clase App: arreglo fijo de 10 casillas y puntero tope. PROHIBIDO usar append/pop/push nativos. LIFO: Last-In, First-Out.',
+  pseudocode: `CLASE PilaApp:  // PILA MANUAL: arreglo fijo + puntero
+  // PASO 0: Estructura fija (NO crece sola)
   ATRIBUTOS:
-    pila = ListaVacia()
-    
+    MAX = 10                          // Capacidad fija: 10 casillas
+    datos = ArregloDe(10, vacío)      // [ _, _, _, _, _, _, _, _, _, _ ]
+    tope = -1                         // Puntero: -1 = pila vacía
+    // REGLA: tope siempre apunta a la cima. Vacía=-1, llena=9 (MAX-1).
+
   METODO push():
     valor = NumeroAleatorioEntre(1, 100)
-    AgregarAlFinal(pila, valor)
-    MOSTRAR "Elemento agregado a la cima: " + valor
-    MOSTRAR "Pila: " + pila
-    
+    // PASO 1: ¿Hay espacio? (evita OVERFLOW)
+    SI tope < MAX - 1 ENTONCES:       // tope < 9
+      // PASO 2: Mover el puntero ARRIBA (+1)
+      tope = tope + 1
+      // PASO 3: Guardar el valor en la casilla que apunta tope
+      datos[tope] = valor             // SIN append/push: asignación directa
+      MOSTRAR "Push: " + valor + " guardado en datos[" + tope + "]"
+    SINO:
+      MOSTRAR "OVERFLOW: pila llena (10/10), no cabe " + valor
+    MOSTRAR "Pila: " + datos + " | tope=" + tope
+
   METODO pop():
-    SI Longitud(pila) > 0 ENTONCES:
-      valorEliminado = EliminarUltimo(pila)
-      MOSTRAR "Elemento eliminado de la cima: " + valorEliminado
+    // PASO 1: ¿Hay algo que sacar? (evita UNDERFLOW)
+    SI tope >= 0 ENTONCES:
+      // PASO 2: Leer la cima ANTES de borrar
+      valorEliminado = datos[tope]
+      // PASO 3: Vaciar la casilla (higiene, queda libre)
+      datos[tope] = vacío             // SIN pop(): asignación a vacío
+      // PASO 4: Mover el puntero ABAJO (-1)
+      tope = tope - 1
+      MOSTRAR "Pop: salió " + valorEliminado + ", tope ahora=" + tope
     SINO:
-      MOSTRAR "La pila está vacía, no se puede hacer pop"
-    MOSTRAR "Pila: " + pila
-    
+      MOSTRAR "UNDERFLOW: pila vacía (tope=-1), nada que sacar"
+    MOSTRAR "Pila: " + datos + " | tope=" + tope
+
   METODO top():
-    SI Longitud(pila) > 0 ENTONCES:
-      valorCima = pila[UltimoIndice]
-      MOSTRAR "Top (Cima actual): " + valorCima
+    SI tope >= 0 ENTONCES:
+      valorCima = datos[tope]         // Solo LEE, no mueve el puntero
+      MOSTRAR "Top: datos[" + tope + "] = " + valorCima + " (sin borrar)"
     SINO:
-      MOSTRAR "La pila está vacía (sin cima)"
-      
+      MOSTRAR "La pila está vacía (tope=-1, sin cima)"
+
   METODO empty():
-    SI Longitud(pila) == 0 ENTONCES:
-      MOSTRAR "Pila vacía"
+    SI tope == -1 ENTONCES:
+      MOSTRAR "Pila vacía (tope=-1)"
     SINO:
-      MOSTRAR "Pila no vacía (elementos: " + Longitud(pila) + ")"`,
+      MOSTRAR "Pila no vacía (elementos: " + (tope + 1) + "/10)"`,
   python: `import random
 import tkinter as tk
-from tkinter import messagebox
 
 class App:
     """
-    Implementación didáctica de Pila para Fabrix
-    Prohibido usar módulos externos de stack: usamos lista nativa.
+    PILA MANUAL para Fabrix (Secundaria)
+    ------------------------------------
+    Estructura: arreglo FIJO de 10 casillas + puntero 'tope'.
+    PROHIBIDO usar append() y pop(): todo se hace moviendo 'tope'
+    y escribiendo/leyendo datos[tope] con asignación directa.
+
+    PASO 0 - Crear la estructura:
+      MAX   = 10 ................. capacidad fija, no crece
+      datos = [None] * 10 ........ 10 casillas vacías [0..9]
+      tope  = -1 ................. puntero: -1 = vacía, 9 = llena
     """
+    MAX = 10  # Capacidad fija de la pila
+
     def __init__(self, ventana):
         self.ventana = ventana
-        self.ventana.title("Pila (Stack) - Fabrix")
+        self.ventana.title("Pila Manual (10 + tope) - Fabrix")
         self.ventana.geometry("400x250")
         self.ventana.configure(bg="#fffde7")  # Fondo lightyellow
-        
-        # Estructura interna de la pila (LIFO)
-        self.pila = []
-        
+
+        # PASO 0: Arreglo fijo + puntero (la estructura manual)
+        self.datos = [None] * self.MAX  # 10 casillas: índices 0..9
+        self.tope = -1                  # Puntero: -1 = vacía
+
         # Etiqueta central de visualización
         self.label_estado = tk.Label(
-            ventana, 
-            text="Pila: []", 
-            font=("Arial", 13, "bold"), 
-            bg="#fffde7", 
+            ventana,
+            text="Pila: []",
+            font=("Arial", 13, "bold"),
+            bg="#fffde7",
             fg="#263238"
         )
         self.label_estado.pack(pady=20)
-        
+
         # Marco para los 4 botones requeridos
         marco_botones = tk.Frame(ventana, bg="#fffde7")
         marco_botones.pack(pady=10)
-        
+
         # 1. Botón Push: agrega aleatorio 1-100
         self.b1 = tk.Button(marco_botones, text="Push (1-100)", width=12, command=self.push, bg="#bbdefb")
         self.b1.grid(row=0, column=0, padx=5, pady=5)
-        
+
         # 2. Botón Pop: elimina de la cima
         self.b2 = tk.Button(marco_botones, text="Pop", width=12, command=self.pop, bg="#ffcdd2")
         self.b2.grid(row=0, column=1, padx=5, pady=5)
-        
+
         # 3. Botón Top: consulta el elemento superior
         self.b3 = tk.Button(marco_botones, text="Top", width=12, command=self.top, bg="#c8e6c9")
         self.b3.grid(row=1, column=0, padx=5, pady=5)
-        
+
         # 4. Botón Empty: comprueba si está vacía
         self.b4 = tk.Button(marco_botones, text="Empty?", width=12, command=self.empty, bg="#ffe0b2")
         self.b4.grid(row=1, column=1, padx=5, pady=5)
-        
-        self.label_mensaje = tk.Label(ventana, text="Listo para operar", bg="#fffde7", fg="#546e7a")
+
+        self.label_mensaje = tk.Label(ventana, text="Listo: tope=-1 (vacía)", bg="#fffde7", fg="#546e7a")
         self.label_mensaje.pack(pady=10)
 
+    # PASO 1-3 de PUSH: comprobar, subir puntero, escribir casilla
     def push(self):
         valor = random.randint(1, 100)
-        self.pila.append(valor)  # Agrega al final (Cima)
-        self.label_estado.config(text=f"Pila: {self.pila}")
-        self.label_mensaje.config(text=f"Push: Se insertó {valor} en la cima")
-
-    def pop(self):
-        if self.pila:  # Guard clause: solo si no está vacía
-            valor = self.pila.pop()
-            self.label_estado.config(text=f"Pila: {self.pila}")
-            self.label_mensaje.config(text=f"Pop: Se eliminó {valor} de la cima")
+        # PASO 1: ¿Hay espacio? Si tope==9 (MAX-1) => OVERFLOW (llena)
+        if self.tope < self.MAX - 1:
+            # PASO 2: Subir el puntero: -1->0, 0->1, ... 8->9
+            self.tope = self.tope + 1
+            # PASO 3: Guardar en la casilla apuntada (SIN append)
+            self.datos[self.tope] = valor
+            self.label_estado.config(text=f"Pila: {self.ver_pila()}")
+            self.label_mensaje.config(text=f"Push: {valor} -> datos[{self.tope}] (tope={self.tope})")
         else:
-            self.label_mensaje.config(text="Pop ignorado: La pila está vacía")
+            # OVERFLOW: las 10 casillas están ocupadas
+            self.label_mensaje.config(text=f"OVERFLOW: llena 10/10, no cabe {valor} (tope=9)")
+
+    # PASO 1-4 de POP: comprobar, leer, vaciar, bajar puntero
+    def pop(self):
+        # PASO 1: ¿Hay algo? Si tope==-1 => UNDERFLOW (vacía)
+        if self.tope >= 0:
+            # PASO 2: Leer la cima ANTES de borrar
+            valor = self.datos[self.tope]
+            # PASO 3: Vaciar la casilla (SIN pop nativo)
+            self.datos[self.tope] = None
+            # PASO 4: Bajar el puntero
+            self.tope = self.tope - 1
+            self.label_estado.config(text=f"Pila: {self.ver_pila()}")
+            self.label_mensaje.config(text=f"Pop: salió {valor} (tope ahora={self.tope})")
+        else:
+            self.label_mensaje.config(text="UNDERFLOW: vacía (tope=-1), nada que sacar")
 
     def top(self):
-        if self.pila:
-            valor = self.pila[-1]  # self.pila[-1] accede al último elemento
-            self.label_mensaje.config(text=f"Top: {valor}")
+        # Solo LEE datos[tope], NO mueve el puntero ni borra
+        if self.tope >= 0:
+            valor = self.datos[self.tope]  # Lectura directa por índice
+            self.label_mensaje.config(text=f"Top: datos[{self.tope}] = {valor} (sin borrar)")
         else:
-            self.label_mensaje.config(text="Top: Pila vacía (sin elementos)")
+            self.label_mensaje.config(text="Top: vacía (tope=-1, sin cima)")
 
     def empty(self):
-        if len(self.pila) == 0:
-            self.label_mensaje.config(text="Estado: Pila vacía")
+        # Vacía <=> tope == -1 | Cantidad de elementos = tope + 1
+        if self.tope == -1:
+            self.label_mensaje.config(text="Estado: vacía (tope=-1)")
         else:
-            self.label_mensaje.config(text=f"Estado: Pila no vacía ({len(self.pila)} elementos)")
+            self.label_mensaje.config(text=f"Estado: {self.tope + 1}/10 elementos (tope={self.tope})")
+
+    def ver_pila(self):
+        # Solo muestra las casillas ocupadas: datos[0..tope]
+        return [self.datos[i] for i in range(self.tope + 1)]
 
 # Para ejecutar en Python:
 if __name__ == "__main__":
     raiz = tk.Tk()
     app = App(raiz)
     raiz.mainloop()`,
-  javascript: `// Implementación didáctica de Stack en JavaScript puro (Vanilla JS)
+  javascript: `// PILA MANUAL en JavaScript puro (Vanilla JS) — Fabrix
+// Estructura: arreglo FIJO de 10 + puntero 'tope'.
+// PROHIBIDO usar .push() y .pop(): solo asignación datos[tope] y tope +/- 1.
 class App {
   constructor() {
-    // Array interno para almacenar la pila
-    this.pila = [];
-    
+    // PASO 0: Estructura fija (NO crece sola)
+    this.MAX = 10;                          // Capacidad fija
+    this.datos = new Array(10).fill(null);  // 10 casillas: índices 0..9
+    this.tope = -1;                         // Puntero: -1 = vacía, 9 = llena
+
     // Obtenemos referencias del DOM
     this.label = document.getElementById("label");
     this.status = document.getElementById("status");
@@ -426,48 +479,70 @@ class App {
     document.getElementById("btn-top").onclick = () => this.top();
     document.getElementById("btn-empty").onclick = () => this.empty();
 
-    this.actualizarUI("Pila lista para operar");
+    this.actualizarUI("Lista: tope=-1 (vacía)");
   }
 
-  // 1) Push: Genera número aleatorio entre 1 y 100 y lo agrega a la cima
+  // PASO 1-3 de PUSH: comprobar, subir puntero, escribir casilla
   push() {
     const valor = Math.floor(Math.random() * 100) + 1;
-    this.pila.push(valor); // Añade al final (cima)
-    this.actualizarUI(\`Push: Se insertó el número \${valor} en la cima.\`);
+    // PASO 1: ¿Hay espacio? Si tope==9 => OVERFLOW
+    if (this.tope < this.MAX - 1) {
+      // PASO 2: Subir el puntero
+      this.tope = this.tope + 1;
+      // PASO 3: Guardar en la casilla apuntada (SIN .push)
+      this.datos[this.tope] = valor;
+      this.actualizarUI(\`Push: \${valor} -> datos[\${this.tope}] (tope=\${this.tope})\`);
+    } else {
+      this.actualizarUI(\`OVERFLOW: llena 10/10, no cabe \${valor} (tope=9)\`);
+    }
   }
 
-  // 2) Pop: Elimina el elemento de la cima si hay elementos
+  // PASO 1-4 de POP: comprobar, leer, vaciar, bajar puntero
   pop() {
-    if (this.pila.length > 0) {
-      const valor = this.pila.pop(); // Remueve el último elemento
-      this.actualizarUI(\`Pop: Se eliminó el número \${valor} de la cima.\`);
+    // PASO 1: ¿Hay algo? Si tope==-1 => UNDERFLOW
+    if (this.tope >= 0) {
+      // PASO 2: Leer la cima ANTES de borrar
+      const valor = this.datos[this.tope];
+      // PASO 3: Vaciar la casilla (SIN .pop)
+      this.datos[this.tope] = null;
+      // PASO 4: Bajar el puntero
+      this.tope = this.tope - 1;
+      this.actualizarUI(\`Pop: salió \${valor} (tope ahora=\${this.tope})\`);
     } else {
-      this.actualizarUI("Pop ignorado: La pila está vacía.");
+      this.actualizarUI("UNDERFLOW: vacía (tope=-1), nada que sacar.");
     }
   }
 
-  // 3) Top: Muestra el valor en la cima sin eliminarlo
+  // Top: solo LEE datos[tope], no mueve el puntero
   top() {
-    if (this.pila.length > 0) {
-      const valor = this.pila[this.pila.length - 1];
-      this.actualizarUI(\`Top: \${valor} (está en la cima)\`);
+    if (this.tope >= 0) {
+      const valor = this.datos[this.tope]; // Lectura directa por índice
+      this.actualizarUI(\`Top: datos[\${this.tope}] = \${valor} (sin borrar)\`);
     } else {
-      this.actualizarUI("Top: Pila vacía (no hay elementos).");
+      this.actualizarUI("Top: vacía (tope=-1, sin cima).");
     }
   }
 
-  // 4) Empty: Verifica si la pila no tiene elementos
+  // Empty: vacía <=> tope == -1. Elementos = tope + 1.
   empty() {
-    if (this.pila.length === 0) {
-      this.actualizarUI("Pila vacía");
+    if (this.tope === -1) {
+      this.actualizarUI("Vacía (tope=-1)");
     } else {
-      this.actualizarUI(\`Pila no vacía (tiene \${this.pila.length} elementos)\`);
+      this.actualizarUI(\`No vacía: \${this.tope + 1}/10 elementos (tope=\${this.tope})\`);
     }
+  }
+
+  verPila() {
+    // Solo las casillas ocupadas: datos[0..tope]
+    const out = [];
+    for (let i = 0; i <= this.tope; i++) out.push(this.datos[i]);
+    return out;
   }
 
   actualizarUI(mensaje) {
     if (this.label) {
-      this.label.textContent = \`Pila: [\${this.pila.join(", ")}]\`;
+      const vals = this.verPila();
+      this.label.textContent = \`Pila: [\${vals.join(", ")}] (tope=\${this.tope})\`;
     }
     if (this.status) {
       this.status.textContent = mensaje;
@@ -480,9 +555,9 @@ window.onload = () => {
   new App();
 };`,
   keyDifferences: [
-    'En Python se usa `self.pila[-1]` para consultar la cima, mientras que en JS se accede con `this.pila[this.pila.length - 1]`.',
-    'Ambos usan `pop()` para remover el último elemento y retornar su valor.',
-    'Principio LIFO (Last-In, First-Out): El último elemento en entrar es el primer elemento en salir (como una pila de platos o libros).',
-    'En la clase de Fabrix se pide no usar librerías externas para entender la estructura base desde un arreglo simple.'
+    'PROHIBIDO append/pop/push nativo: en Python se usa `datos[tope] = valor` y `datos[tope] = None`; en JS `datos[tope] = valor` y `datos[tope] = null`. El tamaño nunca cambia.',
+    'El puntero `tope` (-1 = vacía, 9 = llena) SIEMPRE apunta a la cima. Push hace `tope + 1` y luego escribe; pop lee, vacía y hace `tope - 1`.',
+    'OVERFLOW = intentar push con tope == 9 (10/10 lleno). UNDERFLOW = intentar pop/top con tope == -1 (vacía). Ambas se detectan con `if` antes de tocar el arreglo.',
+    'Cantidad de elementos = tope + 1. La cima se lee con `datos[tope]` en ambos lenguajes (Python ya NO usa `pila[-1]` porque el arreglo tiene 10 casillas fijas).'
   ]
 };

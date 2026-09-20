@@ -190,67 +190,75 @@ export const FlowchartSVG: React.FC<FlowchartProps> = ({ type }) => {
   return (
     <div className="w-full overflow-x-auto py-3">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-        {/* Push Operation */}
+        {/* Push Operation (manual) */}
         <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
           <div className="text-xs font-bold text-sky-800 uppercase tracking-wide mb-2 flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-sky-500"></span> Operación 1: push()
+            <span className="w-2 h-2 rounded-full bg-sky-500"></span> Push manual: ¿tope &lt; 9?
           </div>
-          <svg viewBox="0 0 320 220" className="w-full font-sans text-xs">
+          <svg viewBox="0 0 320 250" className="w-full font-sans text-xs">
             <defs>
               <marker id="arr-p" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#475569" />
               </marker>
             </defs>
-            <rect x="70" y="10" width="180" height="30" rx="15" fill="#e0f2fe" stroke="#0284c7" strokeWidth="1.5" />
-            <text x="160" y="30" textAnchor="middle" className="font-medium fill-sky-900">Generar random(1, 100)</text>
-            <line x1="160" y1="40" x2="160" y2="65" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-p)" />
-            
-            <rect x="50" y="65" width="220" height="34" rx="6" fill="#dcfce7" stroke="#16a34a" strokeWidth="1.5" />
-            <text x="160" y="87" textAnchor="middle" className="font-semibold fill-emerald-900">pila.append(valor) / pila.push(valor)</text>
-            <line x1="160" y1="99" x2="160" y2="125" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-p)" />
+            <rect x="70" y="8" width="180" height="28" rx="14" fill="#e0f2fe" stroke="#0284c7" strokeWidth="1.5" />
+            <text x="160" y="27" textAnchor="middle" className="font-medium fill-sky-900 text-[11px]">Generar random(1, 100)</text>
+            <line x1="160" y1="36" x2="160" y2="56" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-p)" />
 
-            <rect x="60" y="125" width="200" height="32" rx="6" fill="#f1f5f9" stroke="#64748b" strokeWidth="1.5" />
-            <text x="160" y="146" textAnchor="middle" className="fill-slate-800">Actualizar Label: Pila [...]</text>
-            <line x1="160" y1="157" x2="160" y2="180" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-p)" />
+            <polygon points="160,56 235,82 160,108 85,82" fill="#fef3c7" stroke="#d97706" strokeWidth="1.5" />
+            <text x="160" y="86" textAnchor="middle" className="font-medium fill-amber-900 text-[11px]">¿tope &lt; 9? (¿cabe?)</text>
 
-            <rect x="90" y="180" width="140" height="28" rx="14" fill="#f8fafc" stroke="#64748b" strokeWidth="1.5" />
-            <text x="160" y="199" textAnchor="middle" className="font-medium fill-slate-700">Elemento en Cima</text>
+            <line x1="235" y1="82" x2="272" y2="82" stroke="#ef4444" strokeWidth="1.5" markerEnd="url(#arr-p)" />
+            <text x="246" y="75" className="text-[10px] font-bold fill-red-600">NO</text>
+            <rect x="212" y="92" width="100" height="30" rx="6" fill="#fee2e2" stroke="#dc2626" strokeWidth="1.5" />
+            <text x="262" y="111" textAnchor="middle" className="text-[10px] font-bold fill-red-800">OVERFLOW</text>
+
+            <line x1="160" y1="108" x2="160" y2="130" stroke="#16a34a" strokeWidth="1.5" markerEnd="url(#arr-p)" />
+            <text x="172" y="122" className="text-[10px] font-bold fill-emerald-600">SÍ</text>
+            <rect x="60" y="130" width="200" height="30" rx="6" fill="#dcfce7" stroke="#16a34a" strokeWidth="1.5" />
+            <text x="160" y="150" textAnchor="middle" className="font-semibold fill-emerald-900 text-[11px]">tope = tope + 1 (sube 👆)</text>
+            <line x1="160" y1="160" x2="160" y2="180" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-p)" />
+
+            <rect x="50" y="180" width="220" height="30" rx="6" fill="#e0f2fe" stroke="#0284c7" strokeWidth="1.5" />
+            <text x="160" y="200" textAnchor="middle" className="font-semibold fill-sky-900 text-[11px]">datos[tope] = valor (sin append)</text>
+            <line x1="160" y1="210" x2="160" y2="226" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-p)" />
+            <text x="160" y="242" textAnchor="middle" className="text-[10px] fill-slate-500">Mostrar Pila + tope</text>
           </svg>
         </div>
 
-        {/* Pop Operation */}
+        {/* Pop Operation (manual) */}
         <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
           <div className="text-xs font-bold text-rose-800 uppercase tracking-wide mb-2 flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-rose-500"></span> Operación 2: pop() (Guard clause)
+            <span className="w-2 h-2 rounded-full bg-rose-500"></span> Pop manual: ¿tope ≥ 0?
           </div>
-          <svg viewBox="0 0 320 220" className="w-full font-sans text-xs">
+          <svg viewBox="0 0 320 250" className="w-full font-sans text-xs">
             <defs>
               <marker id="arr-pop" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#475569" />
               </marker>
             </defs>
-            <rect x="80" y="10" width="160" height="28" rx="14" fill="#f1f5f9" stroke="#64748b" strokeWidth="1.5" />
-            <text x="160" y="29" textAnchor="middle" className="font-medium fill-slate-800">Llamada a pop()</text>
-            <line x1="160" y1="38" x2="160" y2="60" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-pop)" />
+            <rect x="80" y="8" width="160" height="28" rx="14" fill="#f1f5f9" stroke="#64748b" strokeWidth="1.5" />
+            <text x="160" y="27" textAnchor="middle" className="font-medium fill-slate-800 text-[11px]">Llamada a pop()</text>
+            <line x1="160" y1="36" x2="160" y2="56" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-pop)" />
 
-            <polygon points="160,60 230,85 160,110 90,85" fill="#fef3c7" stroke="#d97706" strokeWidth="1.5" />
-            <text x="160" y="89" textAnchor="middle" className="font-medium fill-amber-900 text-[11px]">¿pila no vacía?</text>
+            <polygon points="160,56 235,82 160,108 85,82" fill="#fef3c7" stroke="#d97706" strokeWidth="1.5" />
+            <text x="160" y="86" textAnchor="middle" className="font-medium fill-amber-900 text-[11px]">¿tope ≥ 0? (¿hay algo?)</text>
 
-            {/* SÍ */}
-            <line x1="160" y1="110" x2="160" y2="135" stroke="#16a34a" strokeWidth="1.5" markerEnd="url(#arr-pop)" />
-            <text x="172" y="125" className="text-[10px] font-bold fill-emerald-600">SÍ</text>
-            <rect x="45" y="135" width="230" height="32" rx="6" fill="#fee2e2" stroke="#dc2626" strokeWidth="1.5" />
-            <text x="160" y="156" textAnchor="middle" className="font-semibold fill-rose-900">extraído = pila.pop()</text>
+            <line x1="235" y1="82" x2="272" y2="82" stroke="#ef4444" strokeWidth="1.5" markerEnd="url(#arr-pop)" />
+            <text x="246" y="75" className="text-[10px] font-bold fill-red-600">NO</text>
+            <rect x="205" y="92" width="108" height="30" rx="6" fill="#f8fafc" stroke="#94a3b8" strokeWidth="1" />
+            <text x="259" y="111" textAnchor="middle" className="text-[10px] fill-slate-500 font-bold">UNDERFLOW</text>
 
-            {/* NO */}
-            <line x1="230" y1="85" x2="270" y2="85" stroke="#ef4444" strokeWidth="1.5" markerEnd="url(#arr-pop)" />
-            <text x="240" y="78" className="text-[10px] font-bold fill-red-600">NO</text>
-            <rect x="200" y="105" width="110" height="30" rx="6" fill="#f8fafc" stroke="#94a3b8" strokeWidth="1" />
-            <text x="255" y="124" textAnchor="middle" className="text-[10px] fill-slate-500">Ignorar (vacía)</text>
+            <line x1="160" y1="108" x2="160" y2="130" stroke="#16a34a" strokeWidth="1.5" markerEnd="url(#arr-pop)" />
+            <text x="172" y="122" className="text-[10px] font-bold fill-emerald-600">SÍ</text>
+            <rect x="45" y="130" width="230" height="30" rx="6" fill="#fee2e2" stroke="#dc2626" strokeWidth="1.5" />
+            <text x="160" y="150" textAnchor="middle" className="font-semibold fill-rose-900 text-[11px]">valor = datos[tope]; vaciar</text>
+            <line x1="160" y1="160" x2="160" y2="180" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-pop)" />
 
-            <line x1="160" y1="167" x2="160" y2="188" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-pop)" />
-            <rect x="70" y="188" width="180" height="26" rx="13" fill="#ecfdf5" stroke="#10b981" strokeWidth="1.5" />
-            <text x="160" y="205" textAnchor="middle" className="font-medium fill-emerald-800 text-[11px]">Mostrar valor retirado</text>
+            <rect x="60" y="180" width="200" height="30" rx="6" fill="#ede9fe" stroke="#7c3aed" strokeWidth="1.5" />
+            <text x="160" y="200" textAnchor="middle" className="font-semibold fill-purple-900 text-[11px]">tope = tope - 1 (baja 👇)</text>
+            <line x1="160" y1="210" x2="160" y2="226" stroke="#475569" strokeWidth="1.5" markerEnd="url(#arr-pop)" />
+            <text x="160" y="242" textAnchor="middle" className="text-[10px] fill-slate-500">Mostrar valor retirado + tope</text>
           </svg>
         </div>
       </div>
